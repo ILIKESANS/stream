@@ -1,0 +1,28 @@
+<body>
+    <div class="popup-chat">
+        <div class="chat-header">
+            <h2>Stream Chat</h2>
+            <div class="viewer-count">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                </svg>
+                <span id="popupViewerCount">0</span>
+            </div>
+        </div>
+        <div class="chat-content">
+            <div id="popupSubtitlesContainer" class="subtitles-container"></div>
+            <div id="popupPollContainer"></div>
+            <div class="chat-messages" id="popupChatMessages"></div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="popupChatInput" placeholder="Send a message...">
+            <button id="popupSendBtn">Chat</button>
+            <button id="popupDonateBtn" class="donate-btn">Donate</button>
+        </div>
+        <div class="chat-info">
+            <small>Note: AI-generated responses may take time to appear depending on API traffic.</small>
+        </div>
+    </div>
+    <link rel="stylesheet" href="popup.css">
+    <script src="popup.js"></script>
+</body>

@@ -1,0 +1,301 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Streaming Simulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.571 4.714h1.715v5.143H11.57V4.714zm4.715 0H18v5.143h-1.714V4.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0H6zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714v9.429z" />
+            </svg>
+            Streaming Simulator
+        </h1>
+        
+        <div class="main-content">
+            <div class="recorder-panel">
+                <div class="controls">
+                    <button id="startBtn" class="btn">Start Recording</button>
+                    <button id="stopBtn" class="btn" disabled>Stop Recording</button>
+                    <button id="streamVideoBtn" class="btn">Stream Video...</button>
+                    <button id="streamLinkBtn" class="btn beta">Stream URL (Beta)</button>
+                    <button id="downloadBtn" class="btn" disabled>Download</button>
+                </div>
+                
+                <div class="status">
+                    <div id="recordingStatus">Ready to record</div>
+                    <div id="timer">00:00</div>
+                </div>
+                
+                <div class="preview-container">
+                    <video id="preview" autoplay muted></video>
+                    <div id="subtitlesContainer" class="subtitles-container"></div>
+                </div>
+                
+                <div class="ai-interval-container">
+                    <label for="aiIntervalSelect">AI Check Interval: </label>
+                    <select id="aiIntervalSelect">
+                        <option value="0.1">Real-time (100ms)</option>
+                        <option value="1">1 second</option>
+                        <option value="1.5">1.5 seconds</option>
+                        <option value="2" selected>2 seconds</option>
+                        <option value="2.5">2.5 seconds</option>
+                        <option value="3">3 seconds</option>
+                        <option value="3.5">3.5 seconds</option>
+                        <option value="5">5 seconds</option>
+                        <option value="7.5">7.5 seconds</option>
+                        <option value="10">10 seconds</option>
+                    </select>
+                </div>
+                
+                <div class="subtitle-controls">
+                    <div class="toggle-wrapper">
+                        <input type="checkbox" id="subtitlesToggle" checked>
+                        <label for="subtitlesToggle">Show Subtitles</label>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <input type="checkbox" id="styleSubtitlesToggle">
+                        <label for="styleSubtitlesToggle">Style Subtitles</label>
+                    </div>
+                    <div class="toggle-wrapper">
+                        <input type="checkbox" id="continueViewersToggle">
+                        <label for="continueViewersToggle">Continue Viewers After End</label>
+                    </div>
+                </div>
+                
+                <div class="chat-settings">
+                    <h3>Chat Style</h3>
+                    <div class="checkbox-container">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="angryViewers">
+                            <label for="angryViewers">Angry Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="memeViewers">
+                            <label for="memeViewers">Meme Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="happyViewers">
+                            <label for="happyViewers">Happy Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="botViewers">
+                            <label for="botViewers">Bot Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="sillyViewers">
+                            <label for="sillyViewers">Silly Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="sadViewers">
+                            <label for="sadViewers">Sad Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="confusedViewers">
+                            <label for="confusedViewers">Confused Viewers</label>
+                        </div>
+                        
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="fanViewers">
+                            <label for="fanViewers">Fan Viewers</label>
+                        </div>
+                    </div>
+                    <div class="settings-note">These settings affect AI-generated chat content</div>
+                    <button id="createStyleBtn" class="create-style-btn">Create Custom Style</button>
+                </div>
+                
+                <div class="custom-emoji-panel">
+                    <h3>
+                        Custom Emojis
+                        <button id="createEmojiBtn" class="create-poll-btn">Add Emoji</button>
+                    </h3>
+                    <div id="emojiGrid" class="emoji-grid">
+                        <!-- Emojis will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="poll-container">
+                    <h3>
+                        Stream Poll
+                        <button id="createPollBtn">Create Poll</button>
+                    </h3>
+                    
+                    <div id="pollFormContainer" style="display: none;">
+                        <form id="pollForm">
+                            <input type="text" name="pollTitle" placeholder="Poll Question" required>
+                            <div id="pollOptions">
+                                <div class="option-container">
+                                    <input type="text" name="option1" placeholder="Option 1" required>
+                                </div>
+                                <div class="option-container">
+                                    <input type="text" name="option2" placeholder="Option 2" required>
+                                </div>
+                            </div>
+                            <button type="button" id="addOptionBtn" class="add-option-btn">+ Add Option</button>
+                            <div class="option-container">
+                                <input type="number" name="duration" placeholder="Duration (seconds)" value="60" min="10" max="300" required>
+                            </div>
+                            <button type="submit" class="create-poll-btn">Start Poll</button>
+                        </form>
+                    </div>
+                    
+                    <div id="activePollContainer"></div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h2>How to Use</h2>
+                <ol>
+                    <li>Click "Start Recording" to begin screen recording.</li>
+                    <li>Choose which window or screen to share.</li>
+                    <li>When finished, click "Stop Recording".</li>
+                    <li>Preview your recording and click "Download" to save.</li>
+                    <li>Use "Stream Video..." to load a video file and generate chat for it.</li>
+                </ol>
+            </div>
+            <div class="supported-sites">
+                Supported sites: <span>direct video links (.mp4, .webm, .m3u8)</span>
+            </div>
+        </div>
+        
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h2>Stream Chat</h2>
+                <div style="display: flex; align-items: center;">
+                    <div class="viewer-count">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                        </svg>
+                        <span id="viewerCount">0</span>
+                    </div>
+                    <button id="settingsBtn" class="settings-icon" title="Chat Settings">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.65.07.97l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65z"/>
+                        </svg>
+                    </button>
+                    <button id="popoutBtn" class="popout-btn">
+                        Popout
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M10 3v2H5v14h14v-5h2v7H3V3h7zm11 0v8h-2V6.413l-7.293 7.294-1.414-1.414L17.587 5H13V3h8z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Send a message...">
+                <button id="sendBtn">Chat</button>
+                <button id="donateBtn" class="donate-btn">Donate</button>
+            </div>
+            <div class="chat-info">
+                <h3>Tip:</h3>
+                When recording, AI-generated chat messages will appear based on your screen content.
+                <br><br>
+                <h3>Note:</h3>
+                AI-generated chat responses may take some time to appear depending on current API traffic.
+            </div>
+        </div>
+    </div>
+    
+    <div id="settingsModal" class="settings-modal">
+        <div class="settings-content">
+            <h3>
+                Chat Settings
+                <button id="closeSettingsBtn" class="settings-close">&times;</button>
+            </h3>
+            <form id="chatSettingsForm" class="settings-form">
+                <div>
+                    <label for="maxMessages">Maximum Chat Messages</label>
+                    <input type="number" id="maxMessages" min="10" max="1000" value="200" required>
+                    <small style="color: #adadb8;">Old messages will be removed when limit is reached</small>
+                </div>
+                <div>
+                    <label for="aiResponseTime">AI Response Time (seconds)</label>
+                    <select id="aiResponseTime">
+                        <option value="0.5">Very Fast (0.5s)</option>
+                        <option value="1.5" selected>Normal (1.5s)</option>
+                        <option value="2.5">Slower (2.5s)</option>
+                        <option value="3.5">Very Slow (3.5s)</option>
+                    </select>
+                    <small style="color: #adadb8;">Controls how quickly viewers respond to your messages</small>
+                </div>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="disableStreamBot">
+                    <label for="disableStreamBot">Disable StreamBot Alerts</label>
+                    <small style="color: #adadb8;">Prevent StreamBot from sending messages about AI service status</small>
+                </div>
+                <button type="submit">Save Settings</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="customStyleModal" class="custom-style-modal">
+        <div class="custom-style-content">
+            <h3>
+                Create Custom Chat Style
+                <button id="closeCustomStyleBtn" class="settings-close">&times;</button>
+            </h3>
+            <form id="customStyleForm" class="custom-style-form">
+                <div>
+                    <label for="customStyleTitle">Style Title</label>
+                    <div class="input-with-mic">
+                        <input type="text" id="customStyleTitle" placeholder="E.g., Expert Viewers" required>
+                        <button type="button" class="mic-button" id="titleMicBtn" title="Use voice input">🎤</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="customStyleDescription">Style Description</label>
+                    <div class="input-with-mic">
+                        <textarea id="customStyleDescription" placeholder="Describe how these viewers should talk and behave in chat" required></textarea>
+                        <button type="button" class="mic-button" id="descriptionMicBtn" title="Use voice input">🎤</button>
+                    </div>
+                    <small style="color: #adadb8;">This will be used in AI prompts to generate messages with this style</small>
+                </div>
+                <button type="submit">Create Style</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="emojiModal" class="emoji-modal">
+        <div class="emoji-content">
+            <h3>
+                Add Custom Emoji
+                <button id="closeEmojiBtn" class="settings-close">&times;</button>
+            </h3>
+            <form id="emojiForm" class="emoji-form">
+                <div id="emojiPreview" class="emoji-preview">
+                    <!-- Emoji preview will be shown here -->
+                </div>
+                <div class="image-input-container">
+                    <label for="emojiFileInput">Emoji Image</label>
+                    <input type="file" id="emojiFileInput" class="image-input" accept="image/*" required>
+                    <label for="emojiFileInput" class="image-input-label">Choose an image</label>
+                </div>
+                <div>
+                    <label for="emojiTitle">Emoji Title</label>
+                    <input type="text" id="emojiTitle" placeholder="E.g., PogChamp" required>
+                </div>
+                <div>
+                    <label for="emojiCode">Emoji Code</label>
+                    <input type="text" id="emojiCode" placeholder="E.g., :pog:" required>
+                    <small style="color: #adadb8;">Must start and end with a colon, e.g., :pog: NOTE: Colons are now automatically applied because it could be annoying to apply the colons manually each time.</small>
+                </div>
+                <button type="submit">Add Emoji</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="app.js"></script>
+    <script src="mediaControls.js"></script>
+</body>
+</html>
